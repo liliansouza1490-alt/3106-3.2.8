@@ -21,11 +21,9 @@ struct PatchProjectsView: View {
     @Environment(\.appLanguage) private var language
     @EnvironmentObject private var draftCoordinator: PatchDraftCoordinator
     @EnvironmentObject private var store: PatchProjectStore
-    @AppStorage(FeatureVisibility.cleanerStorageKey) private var cleanerEnabled = true
     @State private var showCreate = false
     @State private var showImporter = false
     @State private var showWallpaperImporter = false
-    @State private var showCleaner = false
     @State private var searchText = ""
     @State private var wallpaperPackages: [WallpaperStagedPackage] = []
     @State private var wallpaperImportFeedback: WallpaperImportFeedback?
@@ -149,15 +147,10 @@ struct PatchProjectsView: View {
                             }
                         }
                     }
-                    if cleanerEnabled {
-                        Section(language.text("repository.utilities")) {
-                            cleanerRow
-                        }
-                    }
                 }
                 .listStyle(.insetGrouped)
             }
-            .navigationTitle(language.text("tab.installed"))
+            .navigationTitle(language.text("home.card.patches"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -220,9 +213,6 @@ struct PatchProjectsView: View {
                 ) { project, password in
                     store.create(project: project, password: password)
                 }
-            }
-            .sheet(isPresented: $showCleaner) {
-                CleanerView()
             }
             .sheet(item: $draftCoordinator.request) { request in
                 PatchProjectEditorView(
@@ -329,31 +319,6 @@ struct PatchProjectsView: View {
             }
         }
         .padding(.vertical, 4)
-    }
-
-    private var cleanerRow: some View {
-        Button {
-            showCleaner = true
-        } label: {
-            HStack(spacing: 12) {
-                AppRowIcon(systemName: "sparkles")
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(language.text("tab.cleaner"))
-                        .font(.body.weight(.semibold))
-                        .foregroundStyle(.primary)
-                    Text(language.text("repository.cleaner_subtitle"))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.tertiary)
-                    .accessibilityHidden(true)
-            }
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
     }
 
     private var wallpaperSymbol: String {

@@ -21,10 +21,8 @@ struct PatchProjectsView: View {
     @Environment(\.appLanguage) private var language
     @EnvironmentObject private var draftCoordinator: PatchDraftCoordinator
     @EnvironmentObject private var store: PatchProjectStore
-    @State private var showCreate = false
     @State private var showImporter = false
     @State private var showWallpaperImporter = false
-    @State private var searchText = ""
     @State private var wallpaperPackages: [WallpaperStagedPackage] = []
     @State private var wallpaperImportFeedback: WallpaperImportFeedback?
     @State private var wallpaperPendingDeletion: WallpaperStagedPackage?
@@ -34,46 +32,8 @@ struct PatchProjectsView: View {
     let onOpenSettings: () -> Void
     let onOpenLogs: () -> Void
 
-    private var filteredItems: [PatchLibraryItem] {
-        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !query.isEmpty else { return store.items }
-        return store.items.filter { item in
-            if item.packageURL.lastPathComponent.localizedCaseInsensitiveContains(query) {
-                return true
-            }
-            guard let project = item.project else { return false }
-            if project.name.localizedCaseInsensitiveContains(query)
-                || project.author.localizedCaseInsensitiveContains(query) {
-                return true
-            }
-            guard item.canInspectContents else { return false }
-            return project.allBundleIdentifiers.contains {
-                    $0.localizedCaseInsensitiveContains(query)
-                }
-                || project.directories.contains {
-                    $0.relativePath.localizedCaseInsensitiveContains(query)
-                }
-                || project.rules.contains {
-                    $0.relativePath.localizedCaseInsensitiveContains(query)
-                        || $0.replacementFilename.localizedCaseInsensitiveContains(query)
-                }
-        }
-    }
-
-    private var filteredWallpaperPackages: [WallpaperStagedPackage] {
-        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !query.isEmpty else { return wallpaperPackages }
-        return wallpaperPackages.filter {
-            $0.displayName.localizedCaseInsensitiveContains(query)
-        }
-    }
-
     private var hasLocalContent: Bool {
         !store.items.isEmpty || !wallpaperPackages.isEmpty
-    }
-
-    private var hasSearchResults: Bool {
-        !filteredItems.isEmpty || !filteredWallpaperPackages.isEmpty
     }
 
     init(
@@ -82,46 +42,31 @@ struct PatchProjectsView: View {
     ) {
         self.onOpenSettings = onOpenSettings
         self.onOpenLogs = onOpenLogs
-#if targetEnvironment(simulator)
-        _showCreate = State(
-            initialValue: ProcessInfo.processInfo.arguments.contains("--simulate-patch-editor")
-        )
-#endif
     }
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                AppSearchField(
-                    text: $searchText,
-                    prompt: language.text("installed.search"),
-                    clearLabel: language.text("common.clear")
-                )
-                Divider()
-                List {
+            List {
                     if !hasLocalContent && (store.isBusy || isImportingWallpapers) {
                         loadingState
                             .listRowSeparator(.hidden)
                     } else if !hasLocalContent {
                         emptyState
                             .listRowSeparator(.hidden)
-                    } else if !hasSearchResults && !store.isBusy {
-                        searchEmptyState
-                            .listRowSeparator(.hidden)
                     } else {
-                        if !filteredItems.isEmpty {
+                        if !store.items.isEmpty {
                             Section(language.text("patch.title")) {
-                                ForEach(filteredItems) { item in
+                                ForEach(store.items) { item in
                                     itemRow(item)
                                 }
                                 .onDelete { offsets in
-                                    offsets.map { filteredItems[$0] }.forEach(store.delete)
+                                    offsets.map { store.items[$0] }.forEach(store.delete)
                                 }
                             }
                         }
-                        if !filteredWallpaperPackages.isEmpty {
+                        if !wallpaperPackages.isEmpty {
                             Section(language.text("tab.wallpapers")) {
-                                ForEach(filteredWallpaperPackages) { package in
+                                ForEach(wallpaperPackages) { package in
                                     NavigationLink {
                                         InstalledWallpaperPackageDetailView(
                                             package: package,
@@ -147,42 +92,11 @@ struct PatchProjectsView: View {
                             }
                         }
                     }
-                }
-                .listStyle(.insetGrouped)
             }
+            .listStyle(.insetGrouped)
             .navigationTitle(language.text("home.card.patches"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        Button {
-                            showCreate = true
-                        } label: {
-                            Label(language.text("patch.new"), systemImage: "doc.badge.plus")
-                        }
-                        Button {
-                            showImporter = true
-                        } label: {
-                            Label(language.text("patch.import"), systemImage: "square.and.arrow.down")
-                        }
-                        Button {
-                            showWallpaperImporter = true
-                        } label: {
-                            Label(
-                                language.text("wallpaper.import"),
-                                systemImage: "photo.badge.plus"
-                            )
-                        }
-                    } label: {
-                        if store.isBusy || isImportingWallpapers {
-                            ProgressView()
-                        } else {
-                            Image(systemName: "plus")
-                        }
-                    }
-                    .disabled(store.isBusy || isImportingWallpapers)
-                    .accessibilityLabel(language.text("patch.add"))
-                }
                 AppUtilityToolbar(
                     language: language,
                     onOpenSettings: onOpenSettings,
@@ -205,14 +119,6 @@ struct PatchProjectsView: View {
                     }
                 )
                 .ignoresSafeArea()
-            }
-            .sheet(isPresented: $showCreate) {
-                PatchProjectEditorView(
-                    existingProject: nil,
-                    passwordIsProtected: false
-                ) { project, password in
-                    store.create(project: project, password: password)
-                }
             }
             .sheet(item: $draftCoordinator.request) { request in
                 PatchProjectEditorView(
@@ -414,9 +320,6 @@ struct PatchProjectsView: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
-            Button(language.text("patch.new")) { showCreate = true }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 64)
@@ -433,21 +336,6 @@ struct PatchProjectsView: View {
         .padding(.vertical, 64)
     }
 
-    private var searchEmptyState: some View {
-        VStack(spacing: 10) {
-            Image(systemName: "magnifyingglass")
-                .font(.system(size: AppTheme.emptyIconSize, weight: .light))
-                .foregroundStyle(.secondary)
-            Text(language.text("patch.search_empty"))
-                .font(.headline)
-            Text(language.text("patch.search_empty_message"))
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 64)
-    }
 }
 
 private struct WallpaperImportFeedback: Identifiable {

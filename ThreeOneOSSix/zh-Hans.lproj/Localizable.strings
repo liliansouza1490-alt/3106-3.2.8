@@ -1612,3 +1612,6 @@
 "unlock.log_empty" = "尚无日志。点上方按钮后，链的每一步都会出现在这里。";
 "unlock.banner_title" = "需要解锁";
 "unlock.banner_detail" = "点此运行内核链以获得容器访问";
+
+"appearance.light_mode" = "浅色模式";
+"appearance.dark_mode" = "深色模式";

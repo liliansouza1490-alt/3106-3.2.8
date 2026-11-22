@@ -1,5 +1,13 @@
 import SwiftUI
 
+enum AppAppearance {
+    static let storageKey = "appAppearance.darkMode"
+
+    static func colorScheme(isDarkMode: Bool) -> ColorScheme {
+        isDarkMode ? .dark : .light
+    }
+}
+
 enum AppTheme {
     static let accent = Color(
         uiColor: UIColor { traits in
@@ -22,6 +30,35 @@ enum AppTheme {
     static let contentCardCornerRadius: CGFloat = 20
     static let contentCardInset: CGFloat = 16
     static let contentCardPadding: CGFloat = 16
+    static let glassCornerRadius: CGFloat = 22
+    static let glassStrokeOpacity: Double = 0.24
+}
+
+struct GlassCardModifier: ViewModifier {
+    var cornerRadius: CGFloat = AppTheme.glassCornerRadius
+
+    func body(content: Content) -> some View {
+        content
+            .background(.ultraThinMaterial, in: RoundedRectangle(
+                cornerRadius: cornerRadius,
+                style: .continuous
+            ))
+            .overlay {
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .strokeBorder(
+                        Color.white.opacity(AppTheme.glassStrokeOpacity),
+                        lineWidth: 0.7
+                    )
+                    .allowsHitTesting(false)
+            }
+            .shadow(color: .black.opacity(0.08), radius: 18, y: 8)
+    }
+}
+
+extension View {
+    func glassCard(cornerRadius: CGFloat = AppTheme.glassCornerRadius) -> some View {
+        modifier(GlassCardModifier(cornerRadius: cornerRadius))
+    }
 }
 
 struct AppCardBorder: View {
@@ -90,9 +127,13 @@ struct AppSearchField: View {
         .padding(.horizontal, 11)
         .frame(minHeight: 36)
         .background(
-            Color(uiColor: .secondarySystemFill),
+            .ultraThinMaterial,
             in: RoundedRectangle(cornerRadius: 10, style: .continuous)
         )
+        .overlay {
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .strokeBorder(Color.white.opacity(0.18), lineWidth: 0.6)
+        }
         .padding(.horizontal, AppTheme.pageInset)
         .padding(.vertical, 8)
         .background(.bar)

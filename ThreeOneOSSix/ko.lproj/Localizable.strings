@@ -1577,3 +1577,6 @@
 "unlock.log_empty" = "아직 로그가 없습니다. 위 버튼을 누르면 체인의 각 단계가 여기에 표시됩니다.";
 "unlock.banner_title" = "잠금 해제 필요";
 "unlock.banner_detail" = "눌러서 커널 체인을 실행하고 컨테이너 접근 권한 얻기";
+
+"appearance.light_mode" = "라이트 모드";
+"appearance.dark_mode" = "다크 모드";

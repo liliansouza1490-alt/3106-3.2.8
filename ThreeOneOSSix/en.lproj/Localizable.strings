@@ -1612,3 +1612,6 @@
 "unlock.log_empty" = "No log yet. Press the button above and each stage of the chain appears here.";
 "unlock.banner_title" = "Unlock required";
 "unlock.banner_detail" = "Tap to run the kernel chain and gain container access";
+
+"appearance.light_mode" = "Light mode";
+"appearance.dark_mode" = "Dark mode";

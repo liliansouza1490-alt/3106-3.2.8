@@ -10,6 +10,7 @@ struct ThreeOneOSSixApp: App {
     @StateObject private var repositoryStore = PackageRepositoryStore()
     @StateObject private var migrationTaskCenter = MigrationTaskCenter()
     @AppStorage(AppLanguage.storageKey) private var languageCode = AppLanguage.english.rawValue
+    @AppStorage(AppAppearance.storageKey) private var darkMode = false
     @State private var showOnboarding = OnboardingStore.shouldShow()
     @State private var showAttribution = false
     @State private var updateOffer: AppUpdateChecker.Offer?
@@ -95,6 +96,7 @@ struct ThreeOneOSSixApp: App {
                     .environmentObject(migrationTaskCenter)
                     .environment(\.appLanguage, language)
                     .environment(\.locale, language.locale)
+                    .preferredColorScheme(AppAppearance.colorScheme(isDarkMode: darkMode))
                     .opacity(showOnboarding ? 0 : 1)
                     .allowsHitTesting(!showOnboarding)
 

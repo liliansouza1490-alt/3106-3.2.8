@@ -10,12 +10,21 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section(language.text("settings.language")) {
-                    Picker(language.text("settings.language"), selection: $languageCode) {
-                        ForEach(AppLanguage.allCases) { option in
-                            Text(option.displayName).tag(option.rawValue)
+                    ForEach(AppLanguage.allCases) { option in
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.18)) {
+                                languageCode = option.rawValue
+                            }
+                        } label: {
+                            LanguageOptionRow(
+                                language: option,
+                                isSelected: languageCode == option.rawValue
+                            )
                         }
+                        .buttonStyle(.plain)
+                        .listRowInsets(EdgeInsets(top: 7, leading: 4, bottom: 7, trailing: 4))
+                        .listRowBackground(Color.clear)
                     }
-                    .pickerStyle(.inline)
                 }
 
                 Section {
@@ -49,6 +58,8 @@ struct SettingsView: View {
                 }
             }
             .tint(AppTheme.accent)
+            .scrollContentBackground(.hidden)
+            .background(AppTheme.pageBackground.ignoresSafeArea())
             .navigationTitle(language.text("settings.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -58,5 +69,40 @@ struct SettingsView: View {
                 }
             }
         }
+    }
+}
+
+private struct LanguageOptionRow: View {
+    let language: AppLanguage
+    let isSelected: Bool
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Text(language.rawValue.uppercased())
+                .font(.caption.weight(.bold).monospaced())
+                .foregroundStyle(AppTheme.accent)
+                .frame(width: 48, height: 36)
+                .background(AppTheme.accent.opacity(0.12), in: Capsule())
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(language.displayName)
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(.primary)
+                Text(language.locale.identifier)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer(minLength: 8)
+
+            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                .font(.title3)
+                .foregroundStyle(isSelected ? AppTheme.accent : Color.secondary.opacity(0.45))
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+        .glassCard(cornerRadius: 18)
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }

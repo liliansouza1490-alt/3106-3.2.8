@@ -1021,20 +1021,27 @@ struct AppUtilityToolbar: ToolbarContent {
     let language: AppLanguage
     let onOpenSettings: () -> Void
     let onOpenLogs: () -> Void
+    @AppStorage(AppAppearance.storageKey) private var darkMode = false
 
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
-            Menu {
-                Button(action: onOpenSettings) {
-                    Label(
-                        language.text("settings.title"),
-                        systemImage: "gearshape"
-                    )
+            HStack(spacing: 10) {
+                Button {
+                    darkMode.toggle()
+                } label: {
+                    Image(systemName: darkMode ? "sun.max.fill" : "moon.fill")
+                        .symbolRenderingMode(.hierarchical)
+                        .foregroundStyle(darkMode ? Color.orange : AppTheme.accent)
                 }
-            } label: {
-                Image(systemName: "gearshape")
+                .accessibilityLabel(language.text(
+                    darkMode ? "appearance.light_mode" : "appearance.dark_mode"
+                ))
+
+                Button(action: onOpenSettings) {
+                    Image(systemName: "gearshape")
+                }
+                .accessibilityLabel(language.text("accessibility.open_settings"))
             }
-            .accessibilityLabel(language.text("accessibility.open_settings"))
         }
     }
 }

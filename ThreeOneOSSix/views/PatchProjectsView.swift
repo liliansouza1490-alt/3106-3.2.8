@@ -94,6 +94,8 @@ struct PatchProjectsView: View {
                     }
             }
             .listStyle(.insetGrouped)
+            .scrollContentBackground(.hidden)
+            .background(AppTheme.pageBackground.ignoresSafeArea())
             .toolbar {
                 AppUtilityToolbar(
                     language: language,
@@ -223,6 +225,7 @@ struct PatchProjectsView: View {
             }
         }
         .padding(.vertical, 4)
+        .glassCard(cornerRadius: 18)
     }
 
     private var wallpaperSymbol: String {
@@ -379,6 +382,7 @@ private struct PatchProjectRow: View {
             }
         }
         .padding(.vertical, 4)
+        .glassCard(cornerRadius: 18)
     }
 
     private var rowDetail: String {

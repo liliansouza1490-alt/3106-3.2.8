@@ -34,22 +34,29 @@ struct SettingsView: View {
                         Text(language.text(appState.isSupported ? "settings.supported" : "settings.unsupported"))
                             .foregroundStyle(appState.isSupported ? Color.green : Color.red)
                     }
+                    .listRowBackground(.ultraThinMaterial)
                     LabeledContent("iOS 17", value: ExploitSupportPolicy.verifiedIOS17Range)
+                        .listRowBackground(.ultraThinMaterial)
                     LabeledContent("iOS 18", value: ExploitSupportPolicy.verifiedIOS18Range)
+                        .listRowBackground(.ultraThinMaterial)
                     LabeledContent(
                         "iOS 26",
                         value: "\(ExploitSupportPolicy.verifiedIOS26BadQueryRange) · \(ExploitSupportPolicy.verifiedIOS26WorseQueryRange)"
                     )
+                    .listRowBackground(.ultraThinMaterial)
                     LabeledContent("iOS 27", value: ExploitSupportPolicy.verifiedIOS27Range)
+                        .listRowBackground(.ultraThinMaterial)
                     LabeledContent(
                         "iOS 27.3",
                         value: "\(ExploitSupportPolicy.verifiedIOS27BuildGatedRange) · \(ExploitSupportPolicy.verifiedIOS27Builds.joined(separator: ", "))"
                     )
+                    .listRowBackground(.ultraThinMaterial)
                     if let reason = appState.unsupportedMessage {
                         Text(reason)
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
+                            .listRowBackground(.ultraThinMaterial)
                     }
                 } header: {
                     Text(language.text("settings.verified_versions"))
@@ -60,6 +67,8 @@ struct SettingsView: View {
             .tint(AppTheme.accent)
             .scrollContentBackground(.hidden)
             .background(AppTheme.pageBackground.ignoresSafeArea())
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .navigationTitle(language.text("settings.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -78,11 +87,17 @@ private struct LanguageOptionRow: View {
 
     var body: some View {
         HStack(spacing: 14) {
-            Text(language.rawValue.uppercased())
-                .font(.caption.weight(.bold).monospaced())
-                .foregroundStyle(AppTheme.accent)
-                .frame(width: 48, height: 36)
-                .background(AppTheme.accent.opacity(0.12), in: Capsule())
+            Text(language.flag)
+                .font(.system(size: 30))
+                .frame(width: 48, height: 48)
+                .background(.thinMaterial, in: Circle())
+                .overlay {
+                    Circle()
+                        .strokeBorder(
+                            isSelected ? AppTheme.accent.opacity(0.65) : Color.white.opacity(0.22),
+                            lineWidth: isSelected ? 1.5 : 0.7
+                        )
+                }
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(language.displayName)
@@ -100,8 +115,8 @@ private struct LanguageOptionRow: View {
                 .foregroundStyle(isSelected ? AppTheme.accent : Color.secondary.opacity(0.45))
         }
         .padding(.horizontal, 14)
-        .padding(.vertical, 10)
-        .glassCard(cornerRadius: 18)
+        .padding(.vertical, 12)
+        .glassCard(cornerRadius: 20)
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }

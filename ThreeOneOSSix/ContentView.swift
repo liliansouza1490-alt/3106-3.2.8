@@ -12,6 +12,7 @@ struct ContentView: View {
         PatchProjectsView(onOpenSettings: openSettings)
             .tint(AppTheme.accent)
             .imageScale(.small)
+            .background(AppTheme.pageBackground.ignoresSafeArea())
             .onAppear {
 #if !targetEnvironment(simulator)
                 if SandboxAccess.needsWorseQuery, SandboxAccess.appGroup == nil {

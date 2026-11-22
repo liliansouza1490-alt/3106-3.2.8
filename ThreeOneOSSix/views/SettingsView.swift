@@ -71,7 +71,7 @@ struct SettingsView: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
-                    .listRowBackground(.ultraThinMaterial)
+                    .listRowBackground(Material.ultraThin)
             }
         } header: {
             Text(language.text("settings.verified_versions"))
@@ -87,12 +87,12 @@ struct SettingsView: View {
             Text(language.text(appState.isSupported ? "settings.supported" : "settings.unsupported"))
                 .foregroundStyle(appState.isSupported ? Color.green : Color.red)
         }
-        .listRowBackground(.ultraThinMaterial)
+        .listRowBackground(Material.ultraThin)
     }
 
     private func versionRow(_ title: String, value: String) -> some View {
         LabeledContent(title, value: value)
-            .listRowBackground(.ultraThinMaterial)
+            .listRowBackground(Material.ultraThin)
     }
 }
 

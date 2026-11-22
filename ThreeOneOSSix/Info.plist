@@ -58,9 +58,9 @@
 		</dict>
 	</array>
 	<key>PatchHubCatalogURL</key>
-	<string>https://patchhub-59ckairh.manus.space/api/mobile/catalog</string>
+	<string>https://painel.proxysystem.org/api/mobile/catalog</string>
 	<key>CFBundleVersion</key>
-	<string>34</string>
+	<string>35</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>

@@ -7,9 +7,13 @@ enum PatchPackageCodec {
     // Kept as "3105PATCH": the magic and the UUID-derived keys below are part of
     // the on-disk package format. Renaming them would make every existing
     // .3105/.3106 package undecryptable, so only the app identity changes.
-    private static let magic = Data("3105PATCH\0".utf8)
-    static let latestSchemaVersion = 3
-    private static let minimumSchemaVersion = 1
+	private static let magic = Data("3105PATCH\0".utf8)
+	static let latestSchemaVersion = 3
+	private static let minimumSchemaVersion = 1
+	// PatchHub may receive packages created by newer 3106 builds. Their
+	// envelope/payload remains backward-readable, so accept schema 9 for
+	// imports while keeping newly generated packages on schema 3.
+	private static let maximumReadableSchemaVersion = 9
 
     private struct Envelope: Codable {
         let schemaVersion: Int
@@ -382,9 +386,9 @@ enum PatchPackageCodec {
         } catch {
             throw PatchPackageError.invalidPasswordOrCorruptedPackage
         }
-        guard (minimumSchemaVersion...latestSchemaVersion).contains(envelope.schemaVersion) else {
-            throw PatchPackageError.unsupportedVersion
-        }
+		guard (minimumSchemaVersion...maximumReadableSchemaVersion).contains(envelope.schemaVersion) else {
+			throw PatchPackageError.unsupportedVersion
+		}
         guard envelope.keyFingerprint.count == 32,
               envelope.encryptedPayload.count >= 28
         else {
@@ -392,9 +396,9 @@ enum PatchPackageCodec {
         }
         if envelope.isPasswordProtected {
             guard envelope.publicContentKey == nil,
-                  (minimumSchemaVersion...latestSchemaVersion).contains(
-                    envelope.keyAADVersion ?? envelope.schemaVersion
-                  ),
+					(minimumSchemaVersion...maximumReadableSchemaVersion).contains(
+						envelope.keyAADVersion ?? envelope.schemaVersion
+					),
                   envelope.kdfSalt?.count == 16,
                   let iterations = envelope.kdfIterations,
                   iterations >= PatchPackageLimits.minimumKDFIterations,

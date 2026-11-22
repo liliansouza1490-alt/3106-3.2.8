@@ -1623,3 +1623,4 @@
 "patchhub.removal_blocked" = "%@ đã bị xóa khỏi PatchHub nhưng vẫn được giữ trên thiết bị vì đang được áp dụng.";
 "patchhub.identity_blocked" = "Danh tính gói %@ đã thay đổi, nên bản cập nhật bị chặn để đảm bảo an toàn.";
 "patchhub.password_required" = "Nhập mật khẩu gói %@ để hoàn tất nhập tự động.";
+"patchhub.apply_blocked" = "Bản vá đang được bảo trì và không thể áp dụng cho đến khi được bật lại trong PatchHub.";

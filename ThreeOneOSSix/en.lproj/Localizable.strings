@@ -1623,3 +1623,4 @@
 "patchhub.removal_blocked" = "%@ was removed from PatchHub, but it was kept locally because it is currently applied.";
 "patchhub.identity_blocked" = "The downloaded package identity for %@ changed, so the update was blocked for safety.";
 "patchhub.password_required" = "Enter the package password for %@ to finish the automatic import.";
+"patchhub.apply_blocked" = "This patch is in maintenance and cannot be applied until it is enabled again in PatchHub.";

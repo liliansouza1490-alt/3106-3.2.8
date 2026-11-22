@@ -1623,3 +1623,4 @@
 "patchhub.removal_blocked" = "%@ 已从 PatchHub 删除，但因当前正在使用而保留在本地。";
 "patchhub.identity_blocked" = "下载的 %@ 包身份发生变化，已为安全起见阻止更新。";
 "patchhub.password_required" = "请输入 %@ 的包密码以完成自动导入。";
+"patchhub.apply_blocked" = "该补丁正在维护中，在 PatchHub 重新启用前无法应用。";

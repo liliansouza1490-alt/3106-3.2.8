@@ -562,6 +562,7 @@ extension View {
 
 private struct PatchProjectDetailView: View {
     @Environment(\.appLanguage) private var language
+    @EnvironmentObject private var patchHubSync: RemotePatchCatalogSync
     @ObservedObject var store: PatchProjectStore
     let projectID: UUID
     @State private var showEditor = false
@@ -577,6 +578,14 @@ private struct PatchProjectDetailView: View {
 
     private var item: PatchLibraryItem? {
         store.items.first(where: { $0.id == projectID })
+    }
+
+    private var remotePatch: PatchHubPatch? {
+        item.flatMap { patchHubSync.remotePatch(for: $0) }
+    }
+
+    private var isInMaintenance: Bool {
+        remotePatch?.maintenance == true
     }
 
     private var receipt: PatchTransactionReceipt? {
@@ -613,6 +622,13 @@ private struct PatchProjectDetailView: View {
                             label: language.text("repository.source"),
                             value: origin.repositoryName
                         )
+                    }
+                    if isInMaintenance {
+                        Label(
+                            language.text("patchhub.maintenance"),
+                            systemImage: "wrench.and.screwdriver.fill"
+                        )
+                        .foregroundStyle(.orange)
                     }
                 }
 
@@ -711,7 +727,7 @@ private struct PatchProjectDetailView: View {
                     } label: {
                         actionLabel("patch.apply", systemImage: "checkmark.shield.fill")
                     }
-                    .disabled(isWorking || receipt != nil)
+                    .disabled(isWorking || receipt != nil || isInMaintenance)
 
                     if receipt != nil {
                         Button {
@@ -739,7 +755,7 @@ private struct PatchProjectDetailView: View {
             }
         }
         .listStyle(.insetGrouped)
-        .navigationTitle(item?.project?.name ?? language.text("patch.title"))
+        .navigationTitle(remotePatch?.name ?? item?.project?.name ?? language.text("patch.title"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -894,6 +910,13 @@ private struct PatchProjectDetailView: View {
 
     private func apply() {
         guard let item, let baseProject = item.project else { return }
+        guard !isInMaintenance else {
+            actionAlert = PatchStoreAlert(
+                titleKey: "patchhub.sync_title",
+                messageKey: "patchhub.apply_blocked"
+            )
+            return
+        }
         isWorking = true
         Task.detached(priority: .userInitiated) {
             do {

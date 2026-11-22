@@ -94,10 +94,6 @@ struct PatchProjectsView: View {
                     }
             }
             .listStyle(.insetGrouped)
-            .scrollContentBackground(.hidden)
-            .background(AppTheme.pageBackground.ignoresSafeArea())
-            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 AppUtilityToolbar(
                     language: language,
@@ -227,7 +223,6 @@ struct PatchProjectsView: View {
             }
         }
         .padding(.vertical, 4)
-        .softCard(cornerRadius: 18)
     }
 
     private var wallpaperSymbol: String {
@@ -326,8 +321,6 @@ struct PatchProjectsView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 64)
-        .padding(.horizontal, 20)
-        .softCard(cornerRadius: 24)
     }
 
     private var loadingState: some View {
@@ -339,8 +332,6 @@ struct PatchProjectsView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 64)
-        .padding(.horizontal, 20)
-        .softCard(cornerRadius: 24)
     }
 
 }
@@ -388,7 +379,6 @@ private struct PatchProjectRow: View {
             }
         }
         .padding(.vertical, 4)
-        .softCard(cornerRadius: 18)
     }
 
     private var rowDetail: String {
@@ -696,10 +686,6 @@ private struct PatchProjectDetailView: View {
             }
         }
         .listStyle(.insetGrouped)
-        .scrollContentBackground(.hidden)
-        .background(AppTheme.pageBackground.ignoresSafeArea())
-        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
         .navigationTitle(item?.project?.name ?? language.text("patch.title"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

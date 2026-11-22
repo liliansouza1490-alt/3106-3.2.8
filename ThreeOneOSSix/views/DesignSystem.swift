@@ -30,65 +30,6 @@ enum AppTheme {
     static let contentCardCornerRadius: CGFloat = 20
     static let contentCardInset: CGFloat = 16
     static let contentCardPadding: CGFloat = 16
-    static let glassCornerRadius: CGFloat = 22
-    static let glassStrokeOpacity: Double = 0.24
-}
-
-struct GlassCardModifier: ViewModifier {
-    var cornerRadius: CGFloat = AppTheme.glassCornerRadius
-
-    func body(content: Content) -> some View {
-        content
-            .background(.ultraThinMaterial, in: RoundedRectangle(
-                cornerRadius: cornerRadius,
-                style: .continuous
-            ))
-            .overlay {
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .strokeBorder(
-                        Color.white.opacity(AppTheme.glassStrokeOpacity),
-                        lineWidth: 0.7
-                    )
-                    .allowsHitTesting(false)
-            }
-            .shadow(color: .black.opacity(0.08), radius: 18, y: 8)
-    }
-}
-
-extension View {
-    func glassCard(cornerRadius: CGFloat = AppTheme.glassCornerRadius) -> some View {
-        modifier(GlassCardModifier(cornerRadius: cornerRadius))
-    }
-
-    func glassToolbarButton() -> some View {
-        padding(.horizontal, 9)
-            .frame(minWidth: 38, minHeight: 34)
-            .background(.ultraThinMaterial, in: Capsule())
-            .overlay {
-                Capsule()
-                    .strokeBorder(
-                        Color.white.opacity(AppTheme.glassStrokeOpacity),
-                        lineWidth: 0.7
-                    )
-                    .allowsHitTesting(false)
-            }
-            .shadow(color: .black.opacity(0.10), radius: 8, y: 3)
-    }
-
-    func softCard(cornerRadius: CGFloat = 18) -> some View {
-        background(
-            Color(uiColor: .secondarySystemBackground),
-            in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-        )
-        .overlay {
-            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .strokeBorder(
-                    Color(uiColor: .separator).opacity(0.22),
-                    lineWidth: 0.5
-                )
-                .allowsHitTesting(false)
-        }
-    }
 }
 
 struct AppCardBorder: View {
@@ -114,20 +55,12 @@ struct AppRowIcon: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 7, style: .continuous)
-                .fill(.ultraThinMaterial)
-            RoundedRectangle(cornerRadius: 7, style: .continuous)
-                .fill(tint.opacity(0.14))
-            RoundedRectangle(cornerRadius: 7, style: .continuous)
-                .strokeBorder(
-                    Color.white.opacity(AppTheme.glassStrokeOpacity),
-                    lineWidth: 0.7
-                )
+                .fill(tint.opacity(0.12))
             Image(systemName: systemName)
                 .font(.system(size: symbolSize, weight: .medium))
                 .foregroundStyle(tint)
         }
         .frame(width: frameSize, height: frameSize)
-        .shadow(color: .black.opacity(0.10), radius: 5, y: 2)
         .accessibilityHidden(true)
     }
 }
@@ -165,13 +98,9 @@ struct AppSearchField: View {
         .padding(.horizontal, 11)
         .frame(minHeight: 36)
         .background(
-            .ultraThinMaterial,
+            Color(uiColor: .secondarySystemFill),
             in: RoundedRectangle(cornerRadius: 10, style: .continuous)
         )
-        .overlay {
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .strokeBorder(Color.white.opacity(0.18), lineWidth: 0.6)
-        }
         .padding(.horizontal, AppTheme.pageInset)
         .padding(.vertical, 8)
         .background(.bar)
@@ -199,11 +128,6 @@ struct AppLogo: View {
         }
         .frame(width: size, height: size)
         .clipShape(RoundedRectangle(cornerRadius: size * 0.22, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: size * 0.22, style: .continuous)
-                .strokeBorder(Color.white.opacity(AppTheme.glassStrokeOpacity), lineWidth: 0.8)
-        }
-        .shadow(color: .black.opacity(0.14), radius: 10, y: 5)
         .accessibilityHidden(true)
     }
 }

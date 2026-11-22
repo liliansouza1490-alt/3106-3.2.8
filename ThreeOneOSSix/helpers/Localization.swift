@@ -20,15 +20,6 @@ enum AppLanguage: String, CaseIterable, Identifiable {
         }
     }
 
-    var flag: String {
-        switch self {
-        case .english: return "🇺🇸"
-        case .vietnamese: return "🇻🇳"
-        case .simplifiedChinese: return "🇨🇳"
-        case .korean: return "🇰🇷"
-        }
-    }
-
     func text(_ key: String) -> String {
         localizedBundle.localizedString(forKey: key, value: key, table: nil)
     }

@@ -8,76 +8,91 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section(language.text("settings.language")) {
-                    ForEach(AppLanguage.allCases) { option in
-                        Button {
-                            withAnimation(.easeInOut(duration: 0.18)) {
-                                languageCode = option.rawValue
-                            }
-                        } label: {
-                            LanguageOptionRow(
-                                language: option,
-                                isSelected: languageCode == option.rawValue
-                            )
-                        }
-                        .buttonStyle(.plain)
-                        .listRowInsets(EdgeInsets(top: 7, leading: 4, bottom: 7, trailing: 4))
-                        .listRowBackground(Color.clear)
+            settingsForm
+                .tint(AppTheme.accent)
+                .scrollContentBackground(.hidden)
+                .background(AppTheme.pageBackground.ignoresSafeArea())
+                .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar)
+                .navigationTitle(language.text("settings.title"))
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(language.text("common.done")) { dismiss() }
+                            .fontWeight(.semibold)
                     }
                 }
+        }
+    }
 
-                Section {
-                    HStack {
-                        Text(language.text("settings.current_version"))
-                        Spacer()
-                        Text(language.text(appState.isSupported ? "settings.supported" : "settings.unsupported"))
-                            .foregroundStyle(appState.isSupported ? Color.green : Color.red)
+    private var settingsForm: some View {
+        Form {
+            languageSection
+            verifiedVersionsSection
+        }
+    }
+
+    private var languageSection: some View {
+        Section(language.text("settings.language")) {
+            ForEach(AppLanguage.allCases) { option in
+                Button {
+                    withAnimation(.easeInOut(duration: 0.18)) {
+                        languageCode = option.rawValue
                     }
-                    .listRowBackground(.ultraThinMaterial)
-                    LabeledContent("iOS 17", value: ExploitSupportPolicy.verifiedIOS17Range)
-                        .listRowBackground(.ultraThinMaterial)
-                    LabeledContent("iOS 18", value: ExploitSupportPolicy.verifiedIOS18Range)
-                        .listRowBackground(.ultraThinMaterial)
-                    LabeledContent(
-                        "iOS 26",
-                        value: "\(ExploitSupportPolicy.verifiedIOS26BadQueryRange) · \(ExploitSupportPolicy.verifiedIOS26WorseQueryRange)"
+                } label: {
+                    LanguageOptionRow(
+                        language: option,
+                        isSelected: languageCode == option.rawValue
                     )
-                    .listRowBackground(.ultraThinMaterial)
-                    LabeledContent("iOS 27", value: ExploitSupportPolicy.verifiedIOS27Range)
-                        .listRowBackground(.ultraThinMaterial)
-                    LabeledContent(
-                        "iOS 27.3",
-                        value: "\(ExploitSupportPolicy.verifiedIOS27BuildGatedRange) · \(ExploitSupportPolicy.verifiedIOS27Builds.joined(separator: ", "))"
-                    )
-                    .listRowBackground(.ultraThinMaterial)
-                    if let reason = appState.unsupportedMessage {
-                        Text(reason)
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .listRowBackground(.ultraThinMaterial)
-                    }
-                } header: {
-                    Text(language.text("settings.verified_versions"))
-                } footer: {
-                    Text(language.text("settings.supported_versions_footer"))
                 }
-            }
-            .tint(AppTheme.accent)
-            .scrollContentBackground(.hidden)
-            .background(AppTheme.pageBackground.ignoresSafeArea())
-            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .navigationTitle(language.text("settings.title"))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(language.text("common.done")) { dismiss() }
-                        .fontWeight(.semibold)
-                }
+                .buttonStyle(.plain)
+                .listRowInsets(EdgeInsets(top: 7, leading: 4, bottom: 7, trailing: 4))
+                .listRowBackground(Color.clear)
             }
         }
+    }
+
+    private var verifiedVersionsSection: some View {
+        Section {
+            versionStatusRow
+            versionRow("iOS 17", value: ExploitSupportPolicy.verifiedIOS17Range)
+            versionRow("iOS 18", value: ExploitSupportPolicy.verifiedIOS18Range)
+            versionRow(
+                "iOS 26",
+                value: "\(ExploitSupportPolicy.verifiedIOS26BadQueryRange) · \(ExploitSupportPolicy.verifiedIOS26WorseQueryRange)"
+            )
+            versionRow("iOS 27", value: ExploitSupportPolicy.verifiedIOS27Range)
+            versionRow(
+                "iOS 27.3",
+                value: "\(ExploitSupportPolicy.verifiedIOS27BuildGatedRange) · \(ExploitSupportPolicy.verifiedIOS27Builds.joined(separator: ", "))"
+            )
+            if let reason = appState.unsupportedMessage {
+                Text(reason)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .listRowBackground(.ultraThinMaterial)
+            }
+        } header: {
+            Text(language.text("settings.verified_versions"))
+        } footer: {
+            Text(language.text("settings.supported_versions_footer"))
+        }
+    }
+
+    private var versionStatusRow: some View {
+        HStack {
+            Text(language.text("settings.current_version"))
+            Spacer()
+            Text(language.text(appState.isSupported ? "settings.supported" : "settings.unsupported"))
+                .foregroundStyle(appState.isSupported ? Color.green : Color.red)
+        }
+        .listRowBackground(.ultraThinMaterial)
+    }
+
+    private func versionRow(_ title: String, value: String) -> some View {
+        LabeledContent(title, value: value)
+            .listRowBackground(.ultraThinMaterial)
     }
 }
 

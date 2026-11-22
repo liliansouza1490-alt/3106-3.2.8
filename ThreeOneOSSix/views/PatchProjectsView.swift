@@ -55,7 +55,7 @@ struct PatchProjectsView: View {
                             .listRowSeparator(.hidden)
                     } else {
                         if !store.items.isEmpty {
-                            Section(language.text("patch.title")) {
+                            Section {
                                 ForEach(store.items) { item in
                                     itemRow(item)
                                 }
@@ -94,8 +94,6 @@ struct PatchProjectsView: View {
                     }
             }
             .listStyle(.insetGrouped)
-            .navigationTitle(language.text("home.card.patches"))
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 AppUtilityToolbar(
                     language: language,

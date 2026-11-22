@@ -1615,3 +1615,11 @@
 
 "appearance.light_mode" = "浅色模式";
 "appearance.dark_mode" = "深色模式";
+
+/* PatchHub remote synchronization */
+"patchhub.sync_title" = "PatchHub 同步";
+"patchhub.maintenance" = "维护中";
+"patchhub.update_blocked" = "%@ 的更新已暂停，因为该补丁当前正在使用。请先恢复后再更新。";
+"patchhub.removal_blocked" = "%@ 已从 PatchHub 删除，但因当前正在使用而保留在本地。";
+"patchhub.identity_blocked" = "下载的 %@ 包身份发生变化，已为安全起见阻止更新。";
+"patchhub.password_required" = "请输入 %@ 的包密码以完成自动导入。";

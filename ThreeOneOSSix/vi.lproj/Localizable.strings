@@ -1615,3 +1615,11 @@
 
 "appearance.light_mode" = "Chế độ sáng";
 "appearance.dark_mode" = "Chế độ tối";
+
+/* PatchHub remote synchronization */
+"patchhub.sync_title" = "Đồng bộ PatchHub";
+"patchhub.maintenance" = "Bảo trì";
+"patchhub.update_blocked" = "Bản cập nhật %@ đã bị giữ lại vì bản vá này đang được áp dụng. Hãy khôi phục trước khi cập nhật.";
+"patchhub.removal_blocked" = "%@ đã bị xóa khỏi PatchHub nhưng vẫn được giữ trên thiết bị vì đang được áp dụng.";
+"patchhub.identity_blocked" = "Danh tính gói %@ đã thay đổi, nên bản cập nhật bị chặn để đảm bảo an toàn.";
+"patchhub.password_required" = "Nhập mật khẩu gói %@ để hoàn tất nhập tự động.";

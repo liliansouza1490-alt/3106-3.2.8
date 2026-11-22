@@ -21,6 +21,7 @@ struct PatchProjectsView: View {
     @Environment(\.appLanguage) private var language
     @EnvironmentObject private var draftCoordinator: PatchDraftCoordinator
     @EnvironmentObject private var store: PatchProjectStore
+    @EnvironmentObject private var patchHubSync: RemotePatchCatalogSync
     @State private var showImporter = false
     @State private var showWallpaperImporter = false
     @State private var wallpaperPackages: [WallpaperStagedPackage] = []
@@ -167,6 +168,16 @@ struct PatchProjectsView: View {
                     secondaryButton: .cancel(Text(language.text("common.cancel")))
                 )
             }
+            .alert(item: $patchHubSync.notice) { notice in
+                Alert(
+                    title: Text(language.text("patchhub.sync_title")),
+                    message: Text(
+                        notice.argument.map { language.text(notice.messageKey, $0) }
+                            ?? language.text(notice.messageKey)
+                    ),
+                    dismissButton: .default(Text(language.text("common.ok")))
+                )
+            }
             .onAppear {
                 reloadWallpaperPackages()
                 consumeExternalImport()
@@ -293,16 +304,28 @@ struct PatchProjectsView: View {
 
     @ViewBuilder
     private func itemRow(_ item: PatchLibraryItem) -> some View {
+        let remote = patchHubSync.remotePatch(for: item)
+        let iconURL = remote.flatMap { patchHubSync.resolvedURL($0.iconURL) }
         if item.isLocked {
             Button { store.requestUnlock(for: item) } label: {
-                PatchProjectRow(item: item, language: language)
+                PatchProjectRow(
+                    item: item,
+                    remote: remote,
+                    iconURL: iconURL,
+                    language: language
+                )
             }
             .buttonStyle(.plain)
         } else {
             NavigationLink {
                 PatchProjectDetailView(store: store, projectID: item.id)
             } label: {
-                PatchProjectRow(item: item, language: language)
+                PatchProjectRow(
+                    item: item,
+                    remote: remote,
+                    iconURL: iconURL,
+                    language: language
+                )
             }
         }
     }
@@ -344,17 +367,27 @@ private struct WallpaperImportFeedback: Identifiable {
 
 private struct PatchProjectRow: View {
     let item: PatchLibraryItem
+    let remote: PatchHubPatch?
+    let iconURL: URL?
     let language: AppLanguage
 
     var body: some View {
         HStack(spacing: 12) {
-            AppRowIcon(systemName: item.isLocked ? "lock.doc.fill" : "shippingbox.fill")
+            rowIcon
             VStack(alignment: .leading, spacing: 3) {
-                Text(item.project?.name ?? language.text("patch.locked_project"))
+                Text(remote?.name ?? item.project?.name ?? language.text("patch.locked_project"))
                     .font(.body.weight(.semibold))
                     .foregroundStyle(.primary)
                     .lineLimit(1)
                 InstalledContentKindBadge(kind: .patch, language: language)
+                if remote?.maintenance == true {
+                    Label(
+                        language.text("patchhub.maintenance"),
+                        systemImage: "wrench.and.screwdriver.fill"
+                    )
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.orange)
+                }
                 if let author = item.project?.author, !author.isEmpty {
                     Text(language.text("patch.by_author", author))
                         .font(.caption)
@@ -379,6 +412,26 @@ private struct PatchProjectRow: View {
             }
         }
         .padding(.vertical, 4)
+    }
+
+    @ViewBuilder
+    private var rowIcon: some View {
+        if let iconURL {
+            AsyncImage(url: iconURL) { phase in
+                switch phase {
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFill()
+                default:
+                    AppRowIcon(systemName: item.isLocked ? "lock.doc.fill" : "shippingbox.fill")
+                }
+            }
+            .frame(width: 44, height: 44)
+            .clipShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
+        } else {
+            AppRowIcon(systemName: item.isLocked ? "lock.doc.fill" : "shippingbox.fill")
+        }
     }
 
     private var rowDetail: String {

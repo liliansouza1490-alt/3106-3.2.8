@@ -57,6 +57,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>PatchHubCatalogURL</key>
+	<string>https://8328-il4ldgqenytsef3w1agj4-850a500f.us5.manus.computer/api/mobile/catalog</string>
 	<key>CFBundleVersion</key>
 	<string>33</string>
 	<key>LSRequiresIPhoneOS</key>

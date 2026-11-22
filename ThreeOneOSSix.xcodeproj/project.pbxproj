@@ -125,6 +125,7 @@
 		3105K200 /* FileBrowserMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105K100; };
 		3105L200 /* PackageRepositoryModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105L100; };
 		3105L201 /* PackageRepositoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105L101; };
+		3106U200 /* RemotePatchCatalogSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3106U100; };
 		3105L202 /* RepositoryMarketplaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105L102; };
 		3105L203 /* RepositoryHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105L103; };
 		3105L204 /* RepositorySourcesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3105L104; };
@@ -322,6 +323,7 @@
 		3105K100 /* FileBrowserMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileBrowserMetadata.swift; sourceTree = "<group>"; };
 		3105L100 /* PackageRepositoryModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageRepositoryModels.swift; sourceTree = "<group>"; };
 		3105L101 /* PackageRepositoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageRepositoryStore.swift; sourceTree = "<group>"; };
+		3106U100 /* RemotePatchCatalogSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePatchCatalogSync.swift; sourceTree = "<group>"; };
 		3105L102 /* RepositoryMarketplaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryMarketplaceView.swift; sourceTree = "<group>"; };
 		3105L103 /* RepositoryHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryHomeView.swift; sourceTree = "<group>"; };
 		3105L104 /* RepositorySourcesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositorySourcesView.swift; sourceTree = "<group>"; };
@@ -512,6 +514,7 @@
 				3105K100 /* FileBrowserMetadata.swift */,
 				3105L100 /* PackageRepositoryModels.swift */,
 				3105L101 /* PackageRepositoryStore.swift */,
+				3106U100 /* RemotePatchCatalogSync.swift */,
 				3105L105 /* RepositoryPresentationSupport.swift */,
 				3105A113 /* SupportPolicy.swift */,
 				3105D140 /* LanguageResolver.swift */,
@@ -786,6 +789,7 @@
 				3105K200,
 				3105L200,
 				3105L201,
+				3106U200,
 				3105L202,
 				3105L203,
 				3105L204,

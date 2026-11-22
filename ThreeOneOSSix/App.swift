@@ -8,6 +8,7 @@ struct ThreeOneOSSixApp: App {
     @StateObject private var fileOperationCoordinator = FileOperationCoordinator()
     @StateObject private var patchStore = PatchProjectStore()
     @StateObject private var repositoryStore = PackageRepositoryStore()
+    @StateObject private var patchHubSync = RemotePatchCatalogSync()
     @StateObject private var migrationTaskCenter = MigrationTaskCenter()
     @AppStorage(AppLanguage.storageKey) private var languageCode = AppLanguage.english.rawValue
     @AppStorage(AppAppearance.storageKey) private var darkMode = false
@@ -93,6 +94,7 @@ struct ThreeOneOSSixApp: App {
                     .environmentObject(fileOperationCoordinator)
                     .environmentObject(patchStore)
                     .environmentObject(repositoryStore)
+                    .environmentObject(patchHubSync)
                     .environmentObject(migrationTaskCenter)
                     .environment(\.appLanguage, language)
                     .environment(\.locale, language.locale)
@@ -107,6 +109,7 @@ struct ThreeOneOSSixApp: App {
                             showOnboarding = false
                         }
                         appState.detectSupport()
+                        patchHubSync.start(using: patchStore)
                         checkForUpdate()
                     }
                     .environment(\.appLanguage, language)
@@ -149,14 +152,19 @@ struct ThreeOneOSSixApp: App {
             .onAppear {
                 if !showOnboarding {
                     appState.detectSupport()
+                    patchHubSync.start(using: patchStore)
                     checkForUpdate()
                 }
                 migrationTaskCenter.refreshPendingResumes()
                 importSharedConfigPackages()
             }
             .onChange(of: scenePhase) { phase in
-                guard phase == .active, !showOnboarding else { return }
+                guard phase == .active, !showOnboarding else {
+                    if phase != .active { patchHubSync.stop() }
+                    return
+                }
                 appState.detectSupport()
+                patchHubSync.start(using: patchStore)
                 // 3.2.4: also probe for updates on foreground switches —
                 // the cold-start check alone misses releases published
                 // while the app idles in the background. Throttled to one

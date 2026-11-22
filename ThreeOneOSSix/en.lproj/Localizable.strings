@@ -1615,3 +1615,11 @@
 
 "appearance.light_mode" = "Light mode";
 "appearance.dark_mode" = "Dark mode";
+
+/* PatchHub remote synchronization */
+"patchhub.sync_title" = "PatchHub synchronization";
+"patchhub.maintenance" = "Maintenance";
+"patchhub.update_blocked" = "The update for %@ was held because this patch is currently applied. Restore it before updating.";
+"patchhub.removal_blocked" = "%@ was removed from PatchHub, but it was kept locally because it is currently applied.";
+"patchhub.identity_blocked" = "The downloaded package identity for %@ changed, so the update was blocked for safety.";
+"patchhub.password_required" = "Enter the package password for %@ to finish the automatic import.";

@@ -1580,3 +1580,11 @@
 
 "appearance.light_mode" = "라이트 모드";
 "appearance.dark_mode" = "다크 모드";
+
+/* PatchHub remote synchronization */
+"patchhub.sync_title" = "PatchHub 동기화";
+"patchhub.maintenance" = "점검 중";
+"patchhub.update_blocked" = "%@ 업데이트가 보류되었습니다. 현재 패치가 적용 중입니다. 업데이트 전에 복원하세요.";
+"patchhub.removal_blocked" = "%@이(가) PatchHub에서 삭제되었지만 현재 적용 중이므로 기기에 보존했습니다.";
+"patchhub.identity_blocked" = "다운로드한 %@ 패키지의 ID가 변경되어 안전을 위해 업데이트를 차단했습니다.";
+"patchhub.password_required" = "자동 가져오기를 완료하려면 %@ 패키지 암호를 입력하세요.";

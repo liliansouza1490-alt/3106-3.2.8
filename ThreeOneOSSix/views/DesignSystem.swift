@@ -84,12 +84,20 @@ struct AppRowIcon: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 7, style: .continuous)
-                .fill(tint.opacity(0.12))
+                .fill(.ultraThinMaterial)
+            RoundedRectangle(cornerRadius: 7, style: .continuous)
+                .fill(tint.opacity(0.14))
+            RoundedRectangle(cornerRadius: 7, style: .continuous)
+                .strokeBorder(
+                    Color.white.opacity(AppTheme.glassStrokeOpacity),
+                    lineWidth: 0.7
+                )
             Image(systemName: systemName)
                 .font(.system(size: symbolSize, weight: .medium))
                 .foregroundStyle(tint)
         }
         .frame(width: frameSize, height: frameSize)
+        .shadow(color: .black.opacity(0.10), radius: 5, y: 2)
         .accessibilityHidden(true)
     }
 }
@@ -161,6 +169,11 @@ struct AppLogo: View {
         }
         .frame(width: size, height: size)
         .clipShape(RoundedRectangle(cornerRadius: size * 0.22, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: size * 0.22, style: .continuous)
+                .strokeBorder(Color.white.opacity(AppTheme.glassStrokeOpacity), lineWidth: 0.8)
+        }
+        .shadow(color: .black.opacity(0.14), radius: 10, y: 5)
         .accessibilityHidden(true)
     }
 }

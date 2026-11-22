@@ -59,6 +59,21 @@ extension View {
     func glassCard(cornerRadius: CGFloat = AppTheme.glassCornerRadius) -> some View {
         modifier(GlassCardModifier(cornerRadius: cornerRadius))
     }
+
+    func glassToolbarButton() -> some View {
+        padding(.horizontal, 9)
+            .frame(minWidth: 38, minHeight: 34)
+            .background(.ultraThinMaterial, in: Capsule())
+            .overlay {
+                Capsule()
+                    .strokeBorder(
+                        Color.white.opacity(AppTheme.glassStrokeOpacity),
+                        lineWidth: 0.7
+                    )
+                    .allowsHitTesting(false)
+            }
+            .shadow(color: .black.opacity(0.10), radius: 8, y: 3)
+    }
 }
 
 struct AppCardBorder: View {

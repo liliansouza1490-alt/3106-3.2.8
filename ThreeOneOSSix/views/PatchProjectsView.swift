@@ -326,6 +326,8 @@ struct PatchProjectsView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 64)
+        .padding(.horizontal, 20)
+        .glassCard(cornerRadius: 24)
     }
 
     private var loadingState: some View {
@@ -337,6 +339,8 @@ struct PatchProjectsView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 64)
+        .padding(.horizontal, 20)
+        .glassCard(cornerRadius: 24)
     }
 
 }

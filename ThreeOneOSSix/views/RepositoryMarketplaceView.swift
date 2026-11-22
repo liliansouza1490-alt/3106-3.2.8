@@ -1033,6 +1033,7 @@ struct AppUtilityToolbar: ToolbarContent {
                         .symbolRenderingMode(.hierarchical)
                         .foregroundStyle(darkMode ? Color.orange : AppTheme.accent)
                 }
+                .glassToolbarButton()
                 .accessibilityLabel(language.text(
                     darkMode ? "appearance.light_mode" : "appearance.dark_mode"
                 ))
@@ -1040,6 +1041,7 @@ struct AppUtilityToolbar: ToolbarContent {
                 Button(action: onOpenSettings) {
                     Image(systemName: "gearshape")
                 }
+                .glassToolbarButton()
                 .accessibilityLabel(language.text("accessibility.open_settings"))
             }
         }

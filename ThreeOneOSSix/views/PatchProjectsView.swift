@@ -227,7 +227,7 @@ struct PatchProjectsView: View {
             }
         }
         .padding(.vertical, 4)
-        .glassCard(cornerRadius: 18)
+        .softCard(cornerRadius: 18)
     }
 
     private var wallpaperSymbol: String {
@@ -327,7 +327,7 @@ struct PatchProjectsView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 64)
         .padding(.horizontal, 20)
-        .glassCard(cornerRadius: 24)
+        .softCard(cornerRadius: 24)
     }
 
     private var loadingState: some View {
@@ -340,7 +340,7 @@ struct PatchProjectsView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 64)
         .padding(.horizontal, 20)
-        .glassCard(cornerRadius: 24)
+        .softCard(cornerRadius: 24)
     }
 
 }
@@ -388,7 +388,7 @@ private struct PatchProjectRow: View {
             }
         }
         .padding(.vertical, 4)
-        .glassCard(cornerRadius: 18)
+        .softCard(cornerRadius: 18)
     }
 
     private var rowDetail: String {

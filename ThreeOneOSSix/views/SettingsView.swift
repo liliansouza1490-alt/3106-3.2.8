@@ -73,7 +73,7 @@ struct SettingsView: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 10)
-                    .glassCard(cornerRadius: 16)
+                    .softCard(cornerRadius: 16)
                     .listRowBackground(Color.clear)
             }
         } header: {
@@ -85,6 +85,7 @@ struct SettingsView: View {
 
     private var versionStatusRow: some View {
         HStack {
+            AppRowIcon(systemName: "checkmark.shield.fill", tint: appState.isSupported ? .green : .red)
             Text(language.text("settings.current_version"))
             Spacer()
             Text(language.text(appState.isSupported ? "settings.supported" : "settings.unsupported"))
@@ -92,15 +93,18 @@ struct SettingsView: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 11)
-        .glassCard(cornerRadius: 16)
+        .softCard(cornerRadius: 16)
         .listRowBackground(Color.clear)
     }
 
     private func versionRow(_ title: String, value: String) -> some View {
-        LabeledContent(title, value: value)
+        HStack(spacing: 10) {
+            AppRowIcon(systemName: "checkmark.circle.fill", tint: .green, symbolSize: 15, frameSize: 26)
+            LabeledContent(title, value: value)
+        }
             .padding(.horizontal, 12)
             .padding(.vertical, 11)
-            .glassCard(cornerRadius: 16)
+            .softCard(cornerRadius: 16)
             .listRowBackground(Color.clear)
     }
 }
@@ -140,7 +144,7 @@ private struct LanguageOptionRow: View {
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
-        .glassCard(cornerRadius: 20)
+        .softCard(cornerRadius: 20)
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }

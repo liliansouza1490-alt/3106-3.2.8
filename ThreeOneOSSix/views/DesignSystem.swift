@@ -74,6 +74,21 @@ extension View {
             }
             .shadow(color: .black.opacity(0.10), radius: 8, y: 3)
     }
+
+    func softCard(cornerRadius: CGFloat = 18) -> some View {
+        background(
+            Color(uiColor: .secondarySystemBackground),
+            in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .strokeBorder(
+                    Color(uiColor: .separator).opacity(0.22),
+                    lineWidth: 0.5
+                )
+                .allowsHitTesting(false)
+        }
+    }
 }
 
 struct AppCardBorder: View {
